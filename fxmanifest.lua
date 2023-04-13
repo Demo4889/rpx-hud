@@ -25,3 +25,5 @@ files {
     'html/app.js',
     'html/fonts/*',
 }
+
+lua54 'yes'
