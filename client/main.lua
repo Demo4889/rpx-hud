@@ -1,11 +1,6 @@
-RPX = exports['rpx-core']:GetObject()
-local speed = 0.0
-local radarActive = false
-local stress = 0
-local youhavemail = false
-
--- functions
-local function GetShakeIntensity(stresslevel)
+---@param stresslevel number
+---@return number
+local function getShakeIntensity(stresslevel)
     local retval = 0.05
     for _, v in pairs(Config.Intensity['shake']) do
         if stresslevel >= v.min and stresslevel <= v.max then
@@ -16,7 +11,9 @@ local function GetShakeIntensity(stresslevel)
     return retval
 end
 
-local function GetEffectInterval(stresslevel)
+---@param stresslevel number
+---@return integer
+local function getEffectInterval(stresslevel)
     local retval = 60000
     for _, v in pairs(Config.EffectInterval) do
         if stresslevel >= v.min and stresslevel <= v.max then
@@ -52,10 +49,13 @@ CreateThread(function()
             end
             local stamina = tonumber(string.format("%.2f", Citizen.InvokeNative(0x0FF421E467373FCF, PlayerId(), Citizen.ResultAsFloat())))
             local mounted = IsPedOnMount(PlayerPedId())
+
             ---@type any
             local horsehealth = 0 
+            
             ---@type any
             local horsestam = 0 
+
             if mounted then
                 local horse = GetMount(PlayerPedId())
                 local maxHealth = Citizen.InvokeNative(0x4700A416E8324EF3, horse, Citizen.ResultAsInteger())
@@ -86,7 +86,7 @@ CreateThread(function()
                 stamina = stamina,
                 talking = talking,
                 voice = voice,
-                youhavemail = youhavemail,
+                youhavemail = false,
             })
         else
             SendNUIMessage({
@@ -105,12 +105,6 @@ RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
             type = 'cash',
             cash = string.format("%.2f", amount)
         })
-    elseif type == 'bloodmoney' then
-        SendNUIMessage({
-            action = 'show',
-            type = 'bloodmoney',
-            bloodmoney = string.format("%.2f", amount)
-        })
     elseif type == 'bank' then
         SendNUIMessage({
             action = 'show',
@@ -124,7 +118,6 @@ RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
     SendNUIMessage({
         action = 'update',
         cash = LocalPlayer.state.money.cash,
-        bloodmoney = 0,
         bank = LocalPlayer.state.money.bank,
         amount = amount,
         minus = isMinus,
@@ -139,7 +132,7 @@ CreateThread(function() -- Speeding
         if LocalPlayer.state.isLoggedIn then
             local ped = PlayerPedId()
             if IsPedInAnyVehicle(ped, false) then
-                speed = GetEntitySpeed(GetVehiclePedIsIn(ped, false)) * 2.237 --mph
+                local speed = GetEntitySpeed(GetVehiclePedIsIn(ped, false)) * 2.237 --mph
                 if speed >= Config.MinimumSpeed then
                     TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
                 end
@@ -166,9 +159,10 @@ end)
 CreateThread(function()
     while true do
         local ped = PlayerPedId()
-        local sleep = GetEffectInterval(stress)
+        local stress = LocalPlayer.state.metadata.stress
+        local sleep = getEffectInterval(stress)
         if stress >= 100 then
-            local ShakeIntensity = GetShakeIntensity(stress)
+            local ShakeIntensity = getShakeIntensity(stress)
             local FallRepeat = math.random(2, 4)
             local RagdollTimeout = (FallRepeat * 1750)
             ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', ShakeIntensity)
@@ -189,7 +183,7 @@ CreateThread(function()
                 --SetFlash(0, 0, 200, 750, 200)
             end
         elseif stress >= Config.MinimumStress then
-            local ShakeIntensity = GetShakeIntensity(stress)
+            local ShakeIntensity = getShakeIntensity(stress)
             ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', ShakeIntensity)
             --SetFlash(0, 0, 500, 2500, 500)
         end
