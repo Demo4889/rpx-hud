@@ -52,15 +52,17 @@ CreateThread(function()
             end
             local stamina = tonumber(string.format("%.2f", Citizen.InvokeNative(0x0FF421E467373FCF, PlayerId(), Citizen.ResultAsFloat())))
             local mounted = IsPedOnMount(PlayerPedId())
-            local horsehealth = 0
-            local horsestam = 0
+            ---@type any
+            local horsehealth = 0 
+            ---@type any
+            local horsestam = 0 
             if mounted then
                 local horse = GetMount(PlayerPedId())
                 local maxHealth = Citizen.InvokeNative(0x4700A416E8324EF3, horse, Citizen.ResultAsInteger())
                 local maxStamina = Citizen.InvokeNative(0xCB42AFE2B613EE55, horse, Citizen.ResultAsFloat())
                 horsehealth = tonumber(
                     string.format(
-                        "%.2f", Citizen.InvokeNative(0x82368787EA73C0F7, horse) / maxHealth * 100
+                        "%.2f", Citizen.InvokeNative(0x82368787EA73C0F7, horse) / maxHealth * 100 
                     )
                 )
                 horsestam = tonumber(
@@ -121,9 +123,9 @@ end)
 RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
     SendNUIMessage({
         action = 'update',
-        cash = LocalPlayer.state.cash,
+        cash = LocalPlayer.state.money.cash,
         bloodmoney = 0,
-        bank = LocalPlayer.state.bank,
+        bank = LocalPlayer.state.money.bank,
         amount = amount,
         minus = isMinus,
         type = type,
@@ -170,11 +172,11 @@ CreateThread(function()
             local FallRepeat = math.random(2, 4)
             local RagdollTimeout = (FallRepeat * 1750)
             ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', ShakeIntensity)
-            SetFlash(0, 0, 500, 3000, 500)
+            --SetFlash(0, 0, 500, 3000, 500)
 
             if not IsPedRagdoll(ped) and IsPedOnFoot(ped) and not IsPedSwimming(ped) then
                 local player = PlayerPedId()
-                SetPedToRagdollWithFall(player, RagdollTimeout, RagdollTimeout, 1, GetEntityForwardVector(player), 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+                SetPedToRagdollWithFall(player, RagdollTimeout, RagdollTimeout, 1, GetEntityForwardVector(player) --[[@as number]], 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
             end
 
             Wait(500)
@@ -184,12 +186,12 @@ CreateThread(function()
                 Wait(1000)
                 DoScreenFadeIn(200)
                 ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', ShakeIntensity)
-                SetFlash(0, 0, 200, 750, 200)
+                --SetFlash(0, 0, 200, 750, 200)
             end
         elseif stress >= Config.MinimumStress then
             local ShakeIntensity = GetShakeIntensity(stress)
             ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', ShakeIntensity)
-            SetFlash(0, 0, 500, 2500, 500)
+            --SetFlash(0, 0, 500, 2500, 500)
         end
         Wait(sleep)
     end
