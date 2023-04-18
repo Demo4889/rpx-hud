@@ -25,7 +25,15 @@ local function getEffectInterval(stresslevel)
 end
 
 RegisterCommand("hud", function(source, args, rawCommand)
+    if not LocalPlayer.state.isLoggedIn then return end
     LocalPlayer.state.UIHidden = not LocalPlayer.state.UIHidden
+    if LocalPlayer.state.UIHidden then
+        lib.notify({title = "HUD Disabled!", type = "error"})
+        DisplayRadar(false)
+    else
+        lib.notify({title = "HUD Enabled!", type = "success"})
+        DisplayRadar(true)
+    end
 end)
 
 -- Player HUD
