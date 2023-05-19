@@ -11,6 +11,10 @@
 	src: url(fonts/HapnaSlabSerif-Medium.ttf) format('truetype')
 }
 
+* {
+	overflow: hidden;
+}
+
 #main-container {
     width: 100%;
     height: auto;
