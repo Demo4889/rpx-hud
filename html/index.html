@@ -57,6 +57,10 @@
                         <q-circular-progress class="progress" show-value :value="stress" size="50px" :thickness="0.22" color="white" track-color="black-9" center-color="gray-10">
                             <q-icon name="fas fa-brain" size="19px" color="white" />
                     </div>
+                    <div v-if="showDrunk">
+                        <q-circular-progress class="progress" show-value :value="drunk" size="50px" :thickness="0.22" color="white" track-color="black-9" center-color="gray-10">
+                            <q-icon name="fas fa-beer-mug-empty" size="19px" color="white" />
+                    </div>
                     <div v-if="showYouHaveMail">
                         <q-circular-progress class="progress" show-value :value="youhavemail" size="50px" :thickness="0.22" color="white" track-color="black-9" center-color="gray-10">
                             <q-icon name="far fa-envelope" size="19px" :style="{color: showYouHaveMailColor}" />

@@ -109,6 +109,7 @@ const playerHud = {
             thirst: 0,
             stamina: 0,
             stress: 0,
+            drunk: 0,
             voice: 0,
             youhavemail: false,
             horsehealth: 0,
@@ -122,6 +123,7 @@ const playerHud = {
             showStamina: false,
             showThirst: true,
             showStress: true,
+            showDrunk: true,
             showHorseStamina: false,
             showHorseHealth: false,
             showHorseStaminaColor: "#a16600",
@@ -148,6 +150,7 @@ const playerHud = {
             this.hunger = data.hunger;
             this.thirst = data.thirst;
             this.stress = data.stress;
+            this.drunk = data.drunk;
             this.stamina = parseInt(data.stamina);
             this.voice = data.voice;
             this.youhavemail = data.youhavemail;
@@ -189,6 +192,11 @@ const playerHud = {
                 this.showStress = false;
             } else {
                 this.showStress = true;
+            }
+            if (data.drunk == 0) {
+                this.showDrunk = false;
+            } else {
+                this.showDrunk = true;
             }
             if (parseInt(data.stamina) < 50) {
                 this.showStamina = true;

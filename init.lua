@@ -15,5 +15,6 @@ do
         require 'client.main'
         require 'client.modules.money'
         require 'client.modules.stress'
+        require 'client.modules.drunk'
     end
 end

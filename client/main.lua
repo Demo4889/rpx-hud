@@ -62,6 +62,7 @@ CreateThread(function()
                 thirst = LocalPlayer.state.metadata['thirst'],
                 hunger = LocalPlayer.state.metadata['hunger'],
                 stress = LocalPlayer.state.metadata['stress'],
+                drunk = LocalPlayer.state.metadata['drunk'],
                 onHorse = mounted,
                 horsehealth = horsehealth,
                 horsestamina = horsestam,
